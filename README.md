@@ -2,6 +2,8 @@
 
 ## MVP
 
+Harvest-Moon/Farmville like browser game with score that updates even after refresh unless cookies are deleted.
+No game over, can play indefinitely with score as amount of crops shipped and using score to buy more crops?
 
 ## Wireframe
 
