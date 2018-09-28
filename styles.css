@@ -1,0 +1,40 @@
+* { 
+  padding: 0; margin: 0; 
+}
+
+.header-links {
+  background-color: #aceace;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-links > nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-links > nav > p {
+  margin-right: 20px;
+}
+
+.canvas-wrapper {
+  position: relative;
+}
+
+#myCanvas { 
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #eee; 
+  display: block;
+  margin: 0, auto
+}
+
+#secondCanvas { 
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #000; 
+  display: block; 
+  z-index: 1; 
+}
