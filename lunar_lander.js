@@ -1,22 +1,16 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-var ballRadius = 40;
-var x = canvas.width/2;
+var x = 50;
 var y = 30;
-var dx = 0;
-var dy = 0;
 var ax = 0;
 var ay = 0;
-var ixspd = -.75;
+var ixspd = 2;
 var xspd;
 var iyspd = .1;
 var yspd;
 var state = "MOVING";
 var time = 0;
 var fuel = 1000;
-var vy;
-var atime = 1;
-var aticker;
 var angle = -90; 
 
 var toRadian = Math.PI / 180;
@@ -27,6 +21,30 @@ var leftPressed = false;
 var upPressed = false;
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+canvas.onclick = function () { 
+  if (state!= 'MOVING' && fuel > 0) {
+    fuel -= 300;
+    if (fuel < 0 ) {
+      fuel = 0;
+    }  
+    x = 50;
+    y = 30;
+    ax = 0;
+    ay = 0;
+    ixspd = 2;
+    xspd = null;
+    iyspd = .1;
+    yspd = null;
+    state = "MOVING";
+    time = 0;
+    angle = -90; 
+    gameStart();
+  } else {
+    fuel = 1000;
+    gameStart();
+  }
+ };
+
 
 function keyDownHandler(e) {
   switch (e.keyCode) {
@@ -70,15 +88,9 @@ var states=  [
     "LAND"
   ]
 
-function atick() {
-  atime += 1
-}
-
 function tick() {
   time += 1
 }
-
-// setInterval(tick, 1000)
 
 var img = new Image();
 
@@ -89,50 +101,22 @@ function drawGround() {
   ctx.stroke();
 }
 
-
-
-function drawBall() {
-  debugger
-  ctx.beginPath();
-  ctx.arc(x,y, ballRadius, 0, Math.PI*2);
-  ctx.fillStyle = "#0095DD"
-  ctx.fill();
-  ctx.closePath();
-
-}
 function drawState() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD"
   ctx.fillText("State: "+state, canvas.width-200, 20)
 }
 
-function drawVelocity() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
-  ctx.fillText("Velocity: "+vy, canvas.width-200, 100)
-}
-
 function drawxspd() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD"
-  ctx.fillText("Xspd: "+Math.floor(xspd*10), 0, 120)
+  ctx.fillText("Xspd: "+Math.floor(xspd*10), 0, 100)
 }
 
 function drawyspd() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD"
-  ctx.fillText("Yspd: "+Math.floor(yspd*10), 0, 140)
-}
-function drawax() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
-  ctx.fillText("Acceleration X: "+ax, 0, 100)
-}
-
-function draway() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
-  ctx.fillText("Acceleration Y: "+ay, 0, 80)
+  ctx.fillText("Yspd: "+Math.floor(yspd*10), 0, 80)
 }
 
 function drawangle() {
@@ -159,25 +143,10 @@ function drawDY() {
   ctx.fillText("Y: "+yspd, canvas.width-200, 40)
 }
 
-
-
-function drawDX() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
-  ctx.fillText("X: "+xspd, canvas.width-200, 60)
-}
-
-function drawatime() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
-  ctx.fillText("ATime: "+atime, canvas.width-200, 80)
-}
-
 function draw() {
   if (state !== "MOVING") {
     endGame();
-  }
-  
+  }  
   img.src;
   if (angle >= -90 && angle < -10) {
     img.src = 'shuttle4_0.png'
@@ -192,17 +161,11 @@ function draw() {
   ctx.drawImage(img,x,y, 20, 20);
   drawTime();
   drawFuel();
-  drawax();
-  draway();
   drawxspd();
   drawyspd();
-  // drawBall();
   drawState();
-  drawatime();
-  drawVelocity();
   drawangle();
   drawDY();
-  drawDX();
   drawGround();
 
   if (rightPressed && angle < 90 ) {
@@ -223,7 +186,6 @@ function draw() {
     ay *=.97
     xspd += ax 
     yspd += ay 
-    // yspd *= 1.01
     fuel -= .1;
     lastxpsd = xspd;
     lastyspd = yspd;
@@ -248,7 +210,7 @@ function draw() {
     }
      xspd *= 1;
     
-    yspd+= .002
+    yspd+= .004
   
 
   if (x > canvas.width-20) {
@@ -266,11 +228,20 @@ function draw() {
   if (state === states[0]) {
 
     if (Math.floor(y) >= (canvas.height -(30 + 20))) {
+      if ( fuel <= 300 ) {
+        y = canvas.height - (30 + 20)
+        state = states[1];
+        x = x;
+        y = y;
+        alert("OUT OF FUEL, GAME OVER")
+      } 
+      else {
       y = canvas.height - (30 + 20)
       state = states[1];
       x = x;
       y = y;
-      alert("game over")
+      alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
+      }
     } else {
       if (!xspd) {
         xspd = ixspd;
