@@ -12,13 +12,11 @@ var time = 0;
 var fuel = 1000;
 var vy;
 var atime = 1;
-var aticker = setInterval(atick, 1000);
+var aticker;
 var angle = -90; 
 
 var toRadian = Math.PI / 180;
-//img size seems to be 45x45
-// Math.cos(angle*toRadian) => dy
-// Math.sin(angle*toRadian) => dx
+//img size seems to be 52x52
 
 
 var states=  [
@@ -35,20 +33,9 @@ function tick() {
   time += 1
 }
 
-setInterval(tick, 1000)
+// setInterval(tick, 1000)
 
 var img = new Image();
-
-var spriteWidth  = 350,
-    spriteHeight = 170,
-    pixelsLeft   = 170,
-    pixelsTop    = 10,
-
-    // Where are we going to draw
-    // the sprite on the canvas
-    canvasPosX   = 20,
-    canvasPosY   = 20
-;
 
 function drawGround() {
   ctx.beginPath();
@@ -119,6 +106,10 @@ function drawatime() {
 }
 
 function draw() {
+  if (state !== "MOVING") {
+    endGame();
+  }
+  
   img.src;
   if (angle >= -90 && angle < -10) {
     img.src = 'shuttle4_0.png'
@@ -130,11 +121,7 @@ function draw() {
   img.src = 'shuttle2_0.png';
   }
   ctx.clearRect(0,0, canvas.width, canvas.height);
-  // ctx.save();
-  // ctx.translate(canvas.width/2, canvas.height/2)
-  // ctx.rotate(angle*toRadian);
-  ctx.drawImage(img,x,y);
-  // ctx.restore();
+  ctx.drawImage(img,x,y, 52, 52);
   drawTime();
   drawFuel();
   // drawBall();
@@ -170,16 +157,19 @@ function draw() {
   let initialv = dy*atime;
   let velocity = yspd*atime;
   vy = velocity
-  x += (dx+xspd);
-  y += (initialv-velocity);
 
   if (state === states[0]) {
 
-    if (y >= (canvas.height -(30 + 45))) {
-      y = canvas.height - (30 + 45)
+    if (y >= (canvas.height -(30 + 52))) {
+      y = canvas.height - (30 + 52)
       state = states[1];
+      x = x;
+      y = y;
       alert("game over")
-    } 
+    } else {
+      x += (dx+xspd);
+      y += (initialv-velocity);
+    }
   }
 
 }
@@ -223,17 +213,27 @@ function keyUpHandler(e) {
     downPressed = false;
   }
 }
-setInterval(draw, 10);
 
-// ctx.drawImage(img,
-//   pixelsLeft,
-//   pixelsTop,
-//   spriteWidth,
-//   spriteHeight,
-//   canvasPosX,
-//   canvasPosY,
-//   spriteWidth,
-//   spriteHeight
-// );
+var game;
+var ticker;
+function gameStart () {
+  game = setInterval(draw,10);
+  ticker = setInterval(tick, 1000);
+  aticker = setInterval(atick, 1000);
+}
+
+
+function endGame() {
+  clearInterval(game)
+  clearInterval(tick)
+  clearInterval(aticker)
+}
+
+gameStart();
+if (state !== "MOVING" ) {
+  endGame();
+}
+
+
 
 

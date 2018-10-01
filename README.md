@@ -2,8 +2,7 @@
 
 ## MVP
 
-Harvest-Moon/Farmville like browser game with score that updates even after refresh unless cookies are deleted.
-No game over, can play indefinitely with score as amount of crops shipped and using score to buy more crops?
+Lunar Lander is a browser game where the player tries to land a spacecraft with limited fuel and gravitational force acting against the player's ship.
 
 ## Wireframe
 
