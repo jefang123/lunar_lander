@@ -17,7 +17,6 @@ var dy;
 
 var toDegrees = 180 / Math.PI;
 var toRadian = Math.PI / 180;
-//img size seems to be 52x52
 
 var rightPressed = false;
 var leftPressed = false;
@@ -276,23 +275,28 @@ function draw() {
         state = states[3];
         alert("OUT OF FUEL, GAME OVER")
       } 
-      else if ( 
-        (xspd > -5 && xspd < 5) &&
-        (yspd > -5 && yspd < 5) &&
-        (angle > -11 && angle < 11)
-        ) {
-        state = states[2];
-        y = canvas.height - (30+20);
-        alert("YOU'VE LANDED");
-        
-      }
+      else if (angle > -11 && angle < 11) 
+        { 
+          if ((yspd > -.5 && yspd < .5) &&
+          (xspd > -.5 && xspd < .5)) {
+            state = states[2];
+            y = canvas.height - (30+20);
+            alert("YOU'VE LANDED");
+          }
+          else {
+            y = canvas.height - (30+20)
+            ctx.clearRect(x, y, 20, 20)
+            state = states[1];
+            explode();
+            alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
+          }
+        }
       else {
-        debugger
       y = canvas.height - (30+20)
       ctx.clearRect(x, y, 20, 20)
       state = states[1];
       explode();
-      // alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
+      alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
       }
     } else {
       if (!xspd) {
@@ -324,18 +328,3 @@ gameStart();
 if (state !== "MOVING" ) {
   endGame();
 }
-
-
-
-
-// ctx.save();
-// var offsetY = targetToGo.x - shape.y ;
-// var offsetX = targetToGo.y - shape.x ;
-// var degrees = Math.atan2(offsetY,-offsetX);
-// console.log(offsetY + offsetX + degrees);
-// ctx.translate(shape.x, shape.y);
-
-// ctx.rotate(degrees);
-
-// ctx.drawImage(shape.image,-shape.image.width/2,-shape.image.width/2);
-// ctx.restore();
