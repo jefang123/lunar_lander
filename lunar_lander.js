@@ -181,29 +181,18 @@ let crash;
 function collisionDetection() {
   for (let index= 1; index < groundArray.length; index++) {
     if (landingArr.includes(index)) {
+      if (x >= groundArray[index-1][0] && x <= groundArray[index][0]) {
+        dy = groundArray[index][1] - (y+20);
+      }
       ctx.beginPath();
       ctx.moveTo(groundArray[index-1][0],groundArray[index-1][1]);
       ctx.lineTo(groundArray[index][0],groundArray[index][1])
       ctx.strokeStyle="#FF0000";
       ctx.stroke();
-      // land = ctx.isPointInStroke(x, y+20)
-      if (ctx.isPointInStroke(x, y+20)) {
-        if (angle > -11 && angle < 11) 
-        { 
-          if ((yspd > -.5 && yspd < .5) &&
-          (xspd > -.5 && xspd < .5)) {
-            state = states[2];
-            y = y;
-            if (landingspace > 30) {
-              landingspace -= 10;
-            }
-            if (landing > 2) {
-              landing -= 1;
-            } 
-
-            alert("YOU'VE LANDED");
-          }
-          else {
+      
+      if (state === states[0]) {
+        if (ctx.isPointInStroke(x, y+20)) {
+          if (angle <= -11 || angle >= 11) {
             if ( fuel <= 300 ) {
               fuel = 0;
               y = y;
@@ -219,7 +208,39 @@ function collisionDetection() {
               alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
             }
           }
+          if (angle > -11 && angle < 11) 
+          { 
+            if ((yspd > -.5 && yspd < .5) &&
+            (xspd > -.5 && xspd < .5)) {
+              state = states[2];
+              y = y;
+              if (landingspace > 30) {
+                landingspace -= 10;
+              }
+              if (landing > 2) {
+                landing -= 1;
+              } 
+
+              alert("YOU'VE LANDED");
+            } else {
+              if ( fuel <= 300 ) {
+                fuel = 0;
+                y = y;
+                state = states[1];
+                state = states[3];
+                alert("OUT OF FUEL, GAME OVER")
+              } else {
+                y = y;
+                ctx.clearRect(x, y, 20, 20)
+                state = states[1];
+                fuel -= 300;
+                explode();
+                alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+              }
+            }
+          }
         }
+
       }
     }
     else {
@@ -235,22 +256,26 @@ function collisionDetection() {
       ctx.fill();
 
       // crash = ctx.isPointInStroke(x,y_20);
-      if (ctx.isPointInStroke(x, y+20)) {
-        if ( fuel <= 300 ) {
-          fuel = 0;
-          y = y;
-          state = states[1];
-          state = states[3];
-          alert("OUT OF FUEL, GAME OVER")
-        } else {
-          y = y;
-          ctx.clearRect(x, y, 20, 20)
-          state = states[1];
-          fuel -= 300;
-          explode();
-          alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+      if (state === states[0]) {
+        if (ctx.isPointInStroke(x, y+20)) {
+          if ( fuel <= 300 ) {
+            fuel = 0;
+            y = y;
+            state = states[1];
+            state = states[3];
+            alert("OUT OF FUEL, GAME OVER")
+          } 
+          else {
+            y = y;
+            ctx.clearRect(x, y, 20, 20)
+            state = states[1];
+            fuel -= 300;
+            explode();
+            alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+          }
         }
       }
+
     }
   }
   // if (state != states[0]) {
@@ -261,60 +286,8 @@ function collisionDetection() {
   // }
 
   if (state === states[0]) {
-
-    if (land) {
-      if (angle > -11 && angle < 11) 
-        { 
-          if ((yspd > -.5 && yspd < .5) &&
-          (xspd > -.5 && xspd < .5)) {
-            state = states[2];
-            y = y;
-            if (landingspace > 30) {
-              landingspace -= 10;
-            }
-            if (landing > 2) {
-              landing -= 1;
-            } 
-
-            alert("YOU'VE LANDED");
-          }
-          else {
-            if ( fuel <= 300 ) {
-              fuel = 0;
-              y = y;
-              state = states[1];
-              state = states[3];
-              alert("OUT OF FUEL, GAME OVER")
-            } else {
-              y = y;
-              ctx.clearRect(x, y, 20, 20)
-              state = states[1];
-              fuel -= 300;
-              explode();
-              alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
-            }
-          }
-        }
-      else if (crash) {
-        if ( fuel <= 300 ) {
-          fuel = 0;
-          y = y;
-          state = states[1];
-          state = states[3];
-          alert("OUT OF FUEL, GAME OVER")
-        } else {
-          y = y;
-          ctx.clearRect(x, y, 20, 20);
-          state = states[1];
-          fuel -= 300;
-          explode();
-          alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
-        }
-      }
-    } else {
-      x += xspd;
-      y += yspd;
-    }
+    x += xspd;
+    y += yspd;
   }
 
 }
@@ -456,71 +429,8 @@ function draw() {
     if (y < 0) {
       y = 0;
     }
-}
-  // if (state != states[0]) {
-  //   dy = 0;
-  // } 
-  // else {
-  //   dy = (canvas.height -(30+20)) - y;
-  // }
-
-  // if (state === states[0]) {
-
-  //   if (y >= (canvas.height -(30 +20 ))) {
-  //     if (angle > -11 && angle < 11) 
-  //       { 
-  //         if ((yspd > -.5 && yspd < .5) &&
-  //         (xspd > -.5 && xspd < .5)) {
-  //           state = states[2];
-  //           y = canvas.height - (30+20);
-  //           if (landingspace > 30) {
-  //             landingspace -= 10;
-  //           }
-  //           if (landing > 2) {
-  //             landing -= 1;
-  //           } 
-
-  //           alert("YOU'VE LANDED");
-  //         }
-  //         else {
-  //           if ( fuel <= 300 ) {
-  //             fuel = 0;
-  //             y = canvas.height - (30 +20)
-  //             state = states[1];
-  //             state = states[3];
-  //             alert("OUT OF FUEL, GAME OVER")
-  //           } else {
-  //             y = canvas.height - (30+20)
-  //             ctx.clearRect(x, y, 20, 20)
-  //             state = states[1];
-  //             fuel -= 300;
-  //             explode();
-  //             alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
-  //           }
-  //         }
-  //       }
-  //     else {
-  //       if ( fuel <= 300 ) {
-  //         fuel = 0;
-  //         y = canvas.height - (30 +20)
-  //         state = states[1];
-  //         state = states[3];
-  //         alert("OUT OF FUEL, GAME OVER")
-  //       } else {
-  //         y = canvas.height - (30+20)
-  //         ctx.clearRect(x, y, 20, 20)
-  //         state = states[1];
-  //         fuel -= 300;
-  //         explode();
-  //         alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
-  //       }
-  //     }
-  //   } else {
-  //     x += xspd;
-  //     y += yspd;
-  //   }
-  // }
-
+  }
+  
 }
 
 
