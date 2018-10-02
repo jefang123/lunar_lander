@@ -10,7 +10,7 @@ var iyspd = .001;
 var yspd = .001;
 var state = "MOVING";
 var time = 0;
-var fuel = 1000;
+var fuel = 1;
 var angle = -90; 
 var dy;
 
@@ -73,8 +73,13 @@ function keyDownHandler(e) {
       leftPressed = true;
       break;
     case 38 :
+      if (fuel == 0) {
+        upPressed = false;
+      } else {
       upPressed = true;
+      }
       break;
+
     case 40 : 
       downPressed = true;
       break;
@@ -226,16 +231,18 @@ function draw() {
     angle -= 1 
   }
 
-  
   if (upPressed) {
-    if (upPressed && fuel == 0) {
-      upPressed = false
+    if (fuel > 0) {
+      ay = Math.cos(angle*toRadian) * -.005
+      ax = Math.sin(angle*toRadian) * .005
+      xspd += ax 
+      yspd += (ay + .0015) 
+      fuel -= .1
+    } else {
+      fuel = 0;
+      upPressed = false;
     }
-    ay = Math.cos(angle*toRadian) * -.005
-    ax = Math.sin(angle*toRadian) * .005
-    xspd += ax 
-    yspd += (ay + .0015) 
-    fuel -= .1;
+    
     if (x > canvas.width-20) {
       x = 0;
     }
