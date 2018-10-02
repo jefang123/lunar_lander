@@ -12,7 +12,10 @@ var state = "MOVING";
 var time = 0;
 var fuel = 1000;
 var angle = -90; 
+var dy;
 
+
+var toDegrees = 180 / Math.PI;
 var toRadian = Math.PI / 180;
 //img size seems to be 52x52
 
@@ -22,11 +25,8 @@ var upPressed = false;
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 canvas.onclick = function () { 
-  if (state!= 'MOVING' && fuel > 0) {
+  if (state == states[1]) {
     fuel -= 300;
-    if (fuel < 0 ) {
-      fuel = 0;
-    }  
     x = 50;
     y = 30;
     ax = 0;
@@ -38,10 +38,27 @@ canvas.onclick = function () {
     state = "MOVING";
     time = 0;
     angle = -90; 
-    gameStart();
-  } else {
+    // gameStart();
+  } 
+  else if (state == states[2]) {
+    fuel = fuel;
+    x = 50;
+    y = 30;
+    ax = 0;
+    ay = 0;
+    ixspd = 2;
+    xspd = null;
+    iyspd = .1;
+    yspd = null;
+    state = "MOVING";
+    time = 0;
+    angle = -90; 
+    // gameStart();
+  }  
+  else if (state == states[3]) {
     fuel = 1000;
-    gameStart();
+    // gameStart();
+    state = "MOVING";
   }
  };
 
@@ -72,7 +89,6 @@ function keyUpHandler(e) {
       leftPressed = false;
       break;
     case 38 : 
-    debugger
       upPressed = false;
       break;
     case 40 : 
@@ -85,7 +101,8 @@ function keyUpHandler(e) {
 var states=  [
     "MOVING",
     "BOOM",
-    "LAND"
+    "LAND",
+    "GAME OVER"
   ]
 
 function tick() {
@@ -93,6 +110,12 @@ function tick() {
 }
 
 var img = new Image();
+
+function explode() {
+  var explosion = new Image();
+  explosion.src = 'explosion_2.png';
+  ctx.drawImage(explosion, 75, 0, 80 , 80, x, y, 20, 20);
+}
 
 function drawGround() {
   ctx.beginPath();
@@ -140,7 +163,28 @@ function drawFuel() {
 function drawDY() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD"
-  ctx.fillText("Y: "+yspd, canvas.width-200, 40)
+  ctx.fillText(`Altitude ${Math.floor(dy)+1} meters`, canvas.width-200, 40)
+}
+
+function drawShip () {
+  var shipX = x ;
+  var shipY = y ;
+  ctx.translate(shipX, shipY);
+  
+  ctx.rotate(angle*toRadian );
+
+  lx = 0; 
+  ly = 0; 
+  if (angle >= -90 && angle < 0) { 
+    lx = (Math.sin(angle*(toRadian)) *20)
+  }
+  if(angle > 0 && angle <= 90) {
+    ly = -(Math.sin(angle*(toRadian)) *20)
+  }
+
+  ctx.drawImage(img, lx, ly, 20 , 20);
+  ctx.rotate(-(angle * toRadian));
+  ctx.translate(-shipX,-shipY)
 }
 
 function draw() {
@@ -148,17 +192,14 @@ function draw() {
     endGame();
   }  
   img.src;
-  if (angle >= -90 && angle < -10) {
-    img.src = 'shuttle4_0.png'
-  }
-  if (angle >10 && angle <= 90) {
-    img.src = 'shuttle3_0.png'
-  } 
-  if (angle >= -10 && angle <= 10) {
   img.src = 'shuttle2_0.png';
-  }
+ 
   ctx.clearRect(0,0, canvas.width, canvas.height);
-  ctx.drawImage(img,x,y, 20, 20);
+
+
+  // ctx.drawImage(img,x,y, 20, 20);
+  // explode();
+  drawShip();
   drawTime();
   drawFuel();
   drawxspd();
@@ -224,23 +265,34 @@ function draw() {
   }
 }
 
+  dy = (canvas.height -(30+20)) - y
 
   if (state === states[0]) {
 
-    if (Math.floor(y) >= (canvas.height -(30 + 20))) {
+    if (y >= (canvas.height -(30 +20 ))) {
       if ( fuel <= 300 ) {
-        y = canvas.height - (30 + 20)
+        y = canvas.height - (30 +20)
         state = states[1];
-        x = x;
-        y = y;
+        state = states[3];
         alert("OUT OF FUEL, GAME OVER")
       } 
+      else if ( 
+        (xspd > -5 && xspd < 5) &&
+        (yspd > -5 && yspd < 5) &&
+        (angle > -11 && angle < 11)
+        ) {
+        state = states[2];
+        y = canvas.height - (30+20);
+        alert("YOU'VE LANDED");
+        
+      }
       else {
-      y = canvas.height - (30 + 20)
+        debugger
+      y = canvas.height - (30+20)
+      ctx.clearRect(x, y, 20, 20)
       state = states[1];
-      x = x;
-      y = y;
-      alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
+      explode();
+      // alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
       }
     } else {
       if (!xspd) {
@@ -260,15 +312,12 @@ var game;
 var ticker;
 function gameStart () {
   game = setInterval(draw,10);
-  ticker = setInterval(tick, 1000);
-  aticker = setInterval(atick, 1000);
 }
 
 
 function endGame() {
   clearInterval(game)
   clearInterval(tick)
-  clearInterval(aticker)
 }
 
 gameStart();
@@ -279,3 +328,14 @@ if (state !== "MOVING" ) {
 
 
 
+// ctx.save();
+// var offsetY = targetToGo.x - shape.y ;
+// var offsetX = targetToGo.y - shape.x ;
+// var degrees = Math.atan2(offsetY,-offsetX);
+// console.log(offsetY + offsetX + degrees);
+// ctx.translate(shape.x, shape.y);
+
+// ctx.rotate(degrees);
+
+// ctx.drawImage(shape.image,-shape.image.width/2,-shape.image.width/2);
+// ctx.restore();
