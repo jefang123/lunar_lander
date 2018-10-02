@@ -25,7 +25,7 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 canvas.onclick = function () { 
   if (state == states[1]) {
-    fuel -= 300;
+    // fuel -= 300;
     x = 50;
     y = 30;
     ax = 0;
@@ -37,10 +37,10 @@ canvas.onclick = function () {
     state = "MOVING";
     time = 0;
     angle = -90; 
-    // gameStart();
+    gameStart();
   } 
   else if (state == states[2]) {
-    fuel = fuel;
+    // fuel = fuel;
     x = 50;
     y = 30;
     ax = 0;
@@ -52,12 +52,22 @@ canvas.onclick = function () {
     state = "MOVING";
     time = 0;
     angle = -90; 
-    // gameStart();
+    gameStart();
   }  
   else if (state == states[3]) {
     fuel = 1000;
-    // gameStart();
+    x = 50;
+    y = 30;
+    ax = 0;
+    ay = 0;
+    ixspd = 2;
+    xspd = null;
+    iyspd = .1;
+    yspd = null;
     state = "MOVING";
+    time = 0;
+    angle = -90; 
+    gameStart();
   }
  };
 
@@ -168,22 +178,27 @@ function drawDY() {
 function drawShip () {
   var shipX = x ;
   var shipY = y ;
-  ctx.translate(shipX, shipY);
-  
-  ctx.rotate(angle*toRadian );
 
-  lx = 0; 
-  ly = 0; 
-  if (angle >= -90 && angle < 0) { 
-    lx = (Math.sin(angle*(toRadian)) *20)
-  }
-  if(angle > 0 && angle <= 90) {
-    ly = -(Math.sin(angle*(toRadian)) *20)
-  }
+  if (state == states[1] || state == states[3]) {
+    explode();
 
-  ctx.drawImage(img, lx, ly, 20 , 20);
-  ctx.rotate(-(angle * toRadian));
-  ctx.translate(-shipX,-shipY)
+  } else {
+    ctx.translate(shipX, shipY);
+    ctx.rotate(angle*toRadian );
+
+    lx = 0; 
+    ly = 0; 
+    if (angle >= -90 && angle < 0) { 
+      lx = (Math.sin(angle*(toRadian)) *20);
+    }
+    if(angle > 0 && angle <= 90) {
+      ly = -(Math.sin(angle*(toRadian)) *20);
+    }
+
+    ctx.drawImage(img, lx, ly, 20 , 20);
+    ctx.rotate(-(angle * toRadian));
+    ctx.translate(-shipX,-shipY);
+  }
 }
 
 function draw() {
@@ -269,13 +284,14 @@ function draw() {
   if (state === states[0]) {
 
     if (y >= (canvas.height -(30 +20 ))) {
-      if ( fuel <= 300 ) {
-        y = canvas.height - (30 +20)
-        state = states[1];
-        state = states[3];
-        alert("OUT OF FUEL, GAME OVER")
-      } 
-      else if (angle > -11 && angle < 11) 
+      // if ( fuel <= 300 ) {
+      //   fuel = 0;
+      //   y = canvas.height - (30 +20)
+      //   state = states[1];
+      //   state = states[3];
+      //   alert("OUT OF FUEL, GAME OVER")
+      // } 
+      if (angle > -11 && angle < 11) 
         { 
           if ((yspd > -.5 && yspd < .5) &&
           (xspd > -.5 && xspd < .5)) {
@@ -284,19 +300,37 @@ function draw() {
             alert("YOU'VE LANDED");
           }
           else {
-            y = canvas.height - (30+20)
-            ctx.clearRect(x, y, 20, 20)
-            state = states[1];
-            explode();
-            alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
+            if ( fuel <= 300 ) {
+              fuel = 0;
+              y = canvas.height - (30 +20)
+              state = states[1];
+              state = states[3];
+              alert("OUT OF FUEL, GAME OVER")
+            } else {
+              y = canvas.height - (30+20)
+              ctx.clearRect(x, y, 20, 20)
+              state = states[1];
+              explode();
+              fuel -= 300;
+              alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+            }
           }
         }
       else {
-      y = canvas.height - (30+20)
-      ctx.clearRect(x, y, 20, 20)
-      state = states[1];
-      explode();
-      alert(`CRASHED, ${Math.floor(fuel-300)} FUEL remaining`)
+        if ( fuel <= 300 ) {
+          fuel = 0;
+          y = canvas.height - (30 +20)
+          state = states[1];
+          state = states[3];
+          alert("OUT OF FUEL, GAME OVER")
+        } else {
+          y = canvas.height - (30+20)
+          ctx.clearRect(x, y, 20, 20)
+          state = states[1];
+          fuel -= 300;
+          explode();
+          alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+        }
       }
     } else {
       if (!xspd) {
