@@ -10,7 +10,7 @@ var iyspd = .001;
 var yspd = .001;
 var state = "MOVING";
 var time = 0;
-var fuel = 1;
+var fuel = 1000;
 var angle = -90; 
 var dy;
 
@@ -124,11 +124,199 @@ function explode() {
 
 }
 
+var landingspace = 70;
+var space = 15;
+var lines = Math.floor(canvas.width/space)
+var landing = 5;
+var groundArray = [];
+let landingArr =[];
+
+function fillGroundArray() {
+  for (let index = 0; index < landing; index++) {
+    landingArr.push(Math.floor((Math.random() * (lines-10)) + 5));
+  }
+  let lastx = 0;
+  let lasty = canvas.height;
+  for (let index=0; index < lines; index++) {
+    if (index == 0) {
+      groundArray.push([lastx, lasty])
+    }
+    else if (!landingArr.includes(index)) {
+      lastx += space;
+      if (lasty > canvas.height-200) {
+        lasty -= Math.floor(Math.random()*canvas.height/20)
+      } else {
+        lasty += Math.floor(Math.random()*canvas.height/20)
+      }
+      groundArray.push([lastx, lasty])
+    }
+    else if (landingArr.includes(index)) {
+      lastx += landingspace;
+      groundArray.push([lastx, lasty]);
+    }
+    else {
+      groundArray.push( [canvas.width, canvas.height] );
+      lastx = 0;
+      lasty = canvas.height;
+    }
+  }
+}
+
 function drawGround() {
-  ctx.beginPath();
-  ctx.moveTo(0, canvas.height -30 )
-  ctx.lineTo(canvas.width, canvas.height -30)
+  
+  for (let index= 0; index < groundArray.length; index++) {
+    if (index == 0) {
+      ctx.beginPath();
+      ctx.moveTo(groundArray[index][0],groundArray[index][1]);
+    }
+    else if (index < groundArray.length) {
+      ctx.lineTo(groundArray[index][0],groundArray[index][1])
+    }
+  
+  }
   ctx.stroke();
+}
+let land;
+let crash;
+function collisionDetection() {
+  for (let index= 1; index < groundArray.length; index++) {
+    if (landingArr.includes(index)) {
+      ctx.beginPath();
+      ctx.moveTo(groundArray[index-1][0],groundArray[index-1][1]);
+      ctx.lineTo(groundArray[index][0],groundArray[index][1])
+      ctx.strokeStyle="#FF0000";
+      ctx.stroke();
+      // land = ctx.isPointInStroke(x, y+20)
+      if (ctx.isPointInStroke(x, y+20)) {
+        if (angle > -11 && angle < 11) 
+        { 
+          if ((yspd > -.5 && yspd < .5) &&
+          (xspd > -.5 && xspd < .5)) {
+            state = states[2];
+            y = y;
+            if (landingspace > 30) {
+              landingspace -= 10;
+            }
+            if (landing > 2) {
+              landing -= 1;
+            } 
+
+            alert("YOU'VE LANDED");
+          }
+          else {
+            if ( fuel <= 300 ) {
+              fuel = 0;
+              y = y;
+              state = states[1];
+              state = states[3];
+              alert("OUT OF FUEL, GAME OVER")
+            } else {
+              y = y;
+              ctx.clearRect(x, y, 20, 20)
+              state = states[1];
+              fuel -= 300;
+              explode();
+              alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+            }
+          }
+        }
+      }
+    }
+    else {
+      ctx.beginPath();
+      
+      // ctx.moveTo(groundArray[index-1][0],groundArray[index-1][1]);
+      // ctx.lineTo(groundArray[index][0],groundArray[index][1])
+      // ctx.stroke();
+      ctx.moveTo(groundArray[index-1][0], canvas.height);
+      ctx.lineTo(groundArray[index-1][0], groundArray[index-1][1]);
+      ctx.lineTo(groundArray[index][0], groundArray[index][1]);
+      ctx.lineTo(groundArray[index][0], canvas.height);
+      ctx.fill();
+
+      // crash = ctx.isPointInStroke(x,y_20);
+      if (ctx.isPointInStroke(x, y+20)) {
+        if ( fuel <= 300 ) {
+          fuel = 0;
+          y = y;
+          state = states[1];
+          state = states[3];
+          alert("OUT OF FUEL, GAME OVER")
+        } else {
+          y = y;
+          ctx.clearRect(x, y, 20, 20)
+          state = states[1];
+          fuel -= 300;
+          explode();
+          alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+        }
+      }
+    }
+  }
+  // if (state != states[0]) {
+  //   dy = 0;
+  // } 
+  // else {
+  //   dy = (canvas.height -(30+20)) - y;
+  // }
+
+  if (state === states[0]) {
+
+    if (land) {
+      if (angle > -11 && angle < 11) 
+        { 
+          if ((yspd > -.5 && yspd < .5) &&
+          (xspd > -.5 && xspd < .5)) {
+            state = states[2];
+            y = y;
+            if (landingspace > 30) {
+              landingspace -= 10;
+            }
+            if (landing > 2) {
+              landing -= 1;
+            } 
+
+            alert("YOU'VE LANDED");
+          }
+          else {
+            if ( fuel <= 300 ) {
+              fuel = 0;
+              y = y;
+              state = states[1];
+              state = states[3];
+              alert("OUT OF FUEL, GAME OVER")
+            } else {
+              y = y;
+              ctx.clearRect(x, y, 20, 20)
+              state = states[1];
+              fuel -= 300;
+              explode();
+              alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+            }
+          }
+        }
+      else if (crash) {
+        if ( fuel <= 300 ) {
+          fuel = 0;
+          y = y;
+          state = states[1];
+          state = states[3];
+          alert("OUT OF FUEL, GAME OVER")
+        } else {
+          y = y;
+          ctx.clearRect(x, y, 20, 20);
+          state = states[1];
+          fuel -= 300;
+          explode();
+          alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+        }
+      }
+    } else {
+      x += xspd;
+      y += yspd;
+    }
+  }
+
 }
 
 function drawState() {
@@ -223,6 +411,7 @@ function draw() {
   drawangle();
   drawDY();
   drawGround();
+  collisionDetection();
 
   if (rightPressed && angle < 90 ) {
     angle += 1   
@@ -268,62 +457,69 @@ function draw() {
       y = 0;
     }
 }
-  if (state != states[0]) {
-    dy = 0;
-  } 
-  else {
-    dy = (canvas.height -(30+20)) - y;
-  }
+  // if (state != states[0]) {
+  //   dy = 0;
+  // } 
+  // else {
+  //   dy = (canvas.height -(30+20)) - y;
+  // }
 
-  if (state === states[0]) {
+  // if (state === states[0]) {
 
-    if (y >= (canvas.height -(30 +20 ))) {
-      if (angle > -11 && angle < 11) 
-        { 
-          if ((yspd > -.5 && yspd < .5) &&
-          (xspd > -.5 && xspd < .5)) {
-            state = states[2];
-            y = canvas.height - (30+20);
-            alert("YOU'VE LANDED");
-          }
-          else {
-            if ( fuel <= 300 ) {
-              fuel = 0;
-              y = canvas.height - (30 +20)
-              state = states[1];
-              state = states[3];
-              alert("OUT OF FUEL, GAME OVER")
-            } else {
-              y = canvas.height - (30+20)
-              ctx.clearRect(x, y, 20, 20)
-              state = states[1];
-              fuel -= 300;
-              explode();
-              alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
-            }
-          }
-        }
-      else {
-        if ( fuel <= 300 ) {
-          fuel = 0;
-          y = canvas.height - (30 +20)
-          state = states[1];
-          state = states[3];
-          alert("OUT OF FUEL, GAME OVER")
-        } else {
-          y = canvas.height - (30+20)
-          ctx.clearRect(x, y, 20, 20)
-          state = states[1];
-          fuel -= 300;
-          explode();
-          alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
-        }
-      }
-    } else {
-      x += xspd;
-      y += yspd;
-    }
-  }
+  //   if (y >= (canvas.height -(30 +20 ))) {
+  //     if (angle > -11 && angle < 11) 
+  //       { 
+  //         if ((yspd > -.5 && yspd < .5) &&
+  //         (xspd > -.5 && xspd < .5)) {
+  //           state = states[2];
+  //           y = canvas.height - (30+20);
+  //           if (landingspace > 30) {
+  //             landingspace -= 10;
+  //           }
+  //           if (landing > 2) {
+  //             landing -= 1;
+  //           } 
+
+  //           alert("YOU'VE LANDED");
+  //         }
+  //         else {
+  //           if ( fuel <= 300 ) {
+  //             fuel = 0;
+  //             y = canvas.height - (30 +20)
+  //             state = states[1];
+  //             state = states[3];
+  //             alert("OUT OF FUEL, GAME OVER")
+  //           } else {
+  //             y = canvas.height - (30+20)
+  //             ctx.clearRect(x, y, 20, 20)
+  //             state = states[1];
+  //             fuel -= 300;
+  //             explode();
+  //             alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+  //           }
+  //         }
+  //       }
+  //     else {
+  //       if ( fuel <= 300 ) {
+  //         fuel = 0;
+  //         y = canvas.height - (30 +20)
+  //         state = states[1];
+  //         state = states[3];
+  //         alert("OUT OF FUEL, GAME OVER")
+  //       } else {
+  //         y = canvas.height - (30+20)
+  //         ctx.clearRect(x, y, 20, 20)
+  //         state = states[1];
+  //         fuel -= 300;
+  //         explode();
+  //         alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+  //       }
+  //     }
+  //   } else {
+  //     x += xspd;
+  //     y += yspd;
+  //   }
+  // }
 
 }
 
@@ -334,6 +530,9 @@ var ticker;
 function gameStart () {
   game = setInterval(draw,10);
   tick = setInterval(ticker, 1000);
+  groundArray = [];
+  landingArr = [];
+  fillGroundArray();
 }
 
 
