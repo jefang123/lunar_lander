@@ -5,9 +5,9 @@ var y = 30;
 var ax = 0;
 var ay = 0;
 var ixspd = 2;
-var xspd;
-var iyspd = .1;
-var yspd;
+var xspd = 2;
+var iyspd = .001;
+var yspd = .001;
 var state = "MOVING";
 var time = 0;
 var fuel = 1000;
@@ -25,30 +25,24 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 canvas.onclick = function () { 
   if (state == states[1]) {
-    // fuel -= 300;
     x = 50;
     y = 30;
     ax = 0;
     ay = 0;
-    ixspd = 2;
-    xspd = null;
-    iyspd = .1;
-    yspd = null;
+    xspd = 2;
+    yspd = .001;
     state = "MOVING";
     time = 0;
     angle = -90; 
     gameStart();
   } 
   else if (state == states[2]) {
-    // fuel = fuel;
     x = 50;
     y = 30;
     ax = 0;
     ay = 0;
-    ixspd = 2;
-    xspd = null;
-    iyspd = .1;
-    yspd = null;
+    xspd = 2;
+    yspd = .001;
     state = "MOVING";
     time = 0;
     angle = -90; 
@@ -60,10 +54,8 @@ canvas.onclick = function () {
     y = 30;
     ax = 0;
     ay = 0;
-    ixspd = 2;
-    xspd = null;
-    iyspd = .1;
-    yspd = null;
+    xspd = 2;
+    yspd = .001;
     state = "MOVING";
     time = 0;
     angle = -90; 
@@ -124,6 +116,7 @@ function explode() {
   var explosion = new Image();
   explosion.src = 'explosion_2.png';
   ctx.drawImage(explosion, 75, 0, 80 , 80, x, y, 20, 20);
+
 }
 
 function drawGround() {
@@ -176,13 +169,15 @@ function drawDY() {
 }
 
 function drawShip () {
-  var shipX = x ;
-  var shipY = y ;
-
   if (state == states[1] || state == states[3]) {
     explode();
+  } 
+  else {
+    var shipX = x ;
+    var shipY = y ;
+    var thruster = new Image();
+    thruster.src = 'explosion_2.png';
 
-  } else {
     ctx.translate(shipX, shipY);
     ctx.rotate(angle*toRadian );
 
@@ -196,6 +191,10 @@ function drawShip () {
     }
 
     ctx.drawImage(img, lx, ly, 20 , 20);
+    if (upPressed) {
+      ctx.drawImage(thruster, 220, 0, 80, 80, lx+1, ly+8, 10, 20);
+      ctx.drawImage(thruster, 220, 0, 80, 80, lx+10, ly+8, 10, 20);
+    }
     ctx.rotate(-(angle * toRadian));
     ctx.translate(-shipX,-shipY);
   }
@@ -210,9 +209,6 @@ function draw() {
  
   ctx.clearRect(0,0, canvas.width, canvas.height);
 
-
-  // ctx.drawImage(img,x,y, 20, 20);
-  // explode();
   drawShip();
   drawTime();
   drawFuel();
@@ -230,20 +226,16 @@ function draw() {
     angle -= 1 
   }
 
-  if (upPressed && fuel == 0) {
-    upPressed = false
-  }
-  let lastxspd;
-  let lastyspd;
+  
   if (upPressed) {
-    ay = Math.cos(angle*toRadian) * -.01
-    ax = Math.sin(angle*toRadian) * .01
-    ay *=.97
+    if (upPressed && fuel == 0) {
+      upPressed = false
+    }
+    ay = Math.cos(angle*toRadian) * -.005
+    ax = Math.sin(angle*toRadian) * .005
     xspd += ax 
-    yspd += ay 
+    yspd += (ay + .0015) 
     fuel -= .1;
-    lastxpsd = xspd;
-    lastyspd = yspd;
     if (x > canvas.width-20) {
       x = 0;
     }
@@ -256,41 +248,29 @@ function draw() {
   } 
 
   if(!upPressed) {
-   
-    if (lastxspd) {
-    xpd = lastxspd;
-    lastxspd = 0; 
-    yspd = lastyspd;
-    lastyspd = 0;
-    }
-     xspd *= 1;
-    
-    yspd+= .004
+    xspd += -.0002;
+    yspd+= .0015
   
-
-  if (x > canvas.width-20) {
-    x = 0;
-  }
-  if (x < 0) {
-    x = canvas.width-20;
-  }
-  if (y < 0) {
-    y = 0;
-  }
+    if (x > canvas.width-20) {
+        x = 0;
+    }
+    if (x < 0) {
+      x = canvas.width-20;
+    }
+    if (y < 0) {
+      y = 0;
+    }
 }
-
-  dy = (canvas.height -(30+20)) - y
+  if (state != states[0]) {
+    dy = 0;
+  } 
+  else {
+    dy = (canvas.height -(30+20)) - y;
+  }
 
   if (state === states[0]) {
 
     if (y >= (canvas.height -(30 +20 ))) {
-      // if ( fuel <= 300 ) {
-      //   fuel = 0;
-      //   y = canvas.height - (30 +20)
-      //   state = states[1];
-      //   state = states[3];
-      //   alert("OUT OF FUEL, GAME OVER")
-      // } 
       if (angle > -11 && angle < 11) 
         { 
           if ((yspd > -.5 && yspd < .5) &&
@@ -310,8 +290,8 @@ function draw() {
               y = canvas.height - (30+20)
               ctx.clearRect(x, y, 20, 20)
               state = states[1];
-              explode();
               fuel -= 300;
+              explode();
               alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
             }
           }
@@ -333,10 +313,6 @@ function draw() {
         }
       }
     } else {
-      if (!xspd) {
-        xspd = ixspd;
-        yspd = iyspd;
-      }
       x += xspd;
       y += yspd;
     }
@@ -350,6 +326,7 @@ var game;
 var ticker;
 function gameStart () {
   game = setInterval(draw,10);
+  tick = setInterval(ticker, 1000);
 }
 
 
