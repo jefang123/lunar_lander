@@ -5,17 +5,24 @@
 .header-links {
   background-color: #aceace;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.header-links > nav {
+.canvas-wrapper > div {
+  margin: auto;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
-.header-links > nav > p {
-  margin-right: 20px;
+i {
+  font-size: 5rem;
+  text-decoration: none;
+  color: blue;
 }
+
+/* .canvas-wrapper > nav > p {
+  margin-right: 20px;
+} */
 
 .canvas-wrapper {
   position: relative;

@@ -23,8 +23,12 @@ var toRadian = Math.PI / 180;
 var rightPressed = false;
 var leftPressed = false;
 var upPressed = false;
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("keydown", 
+  keyDownHandler, 
+  false);
+document.addEventListener("keyup", 
+  keyUpHandler, 
+  false);
 canvas.onclick = function () { 
   if (state == states[1]) {
     x = 50;
@@ -178,9 +182,6 @@ function drawGround() {
   }
   ctx.stroke();
 }
-let land;
-let crash;
-
 
 
 function collisionDetection() {
@@ -202,16 +203,13 @@ function collisionDetection() {
             if ( fuel <= 300 ) {
               fuel = 0;
               y = y;
-              state = states[1];
               state = states[3];
-              alert("OUT OF FUEL, GAME OVER")
             } else {
               y = y;
               ctx.clearRect(x, y, 20, 20)
               state = states[1];
               fuel -= 300;
               explode();
-              alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
             }
           }
           if (angle > -11 && angle < 11) 
@@ -230,22 +228,22 @@ function collisionDetection() {
               if (gravity < .0040) {
                 gravity += .0005
               }
-
-              alert("YOU'VE LANDED");
+              break;
+              // alert("YOU'VE LANDED");
             } else {
               if ( fuel <= 300 ) {
                 fuel = 0;
                 y = y;
                 state = states[1];
                 state = states[3];
-                alert("OUT OF FUEL, GAME OVER")
+             
               } else {
                 y = y;
                 ctx.clearRect(x, y, 20, 20)
                 state = states[1];
                 fuel -= 300;
                 explode();
-                alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+                
               }
             }
           }
@@ -255,10 +253,6 @@ function collisionDetection() {
     }
     else {
       ctx.beginPath();
-      
-      // ctx.moveTo(groundArray[index-1][0],groundArray[index-1][1]);
-      // ctx.lineTo(groundArray[index][0],groundArray[index][1])
-      // ctx.stroke();
       ctx.moveTo(groundArray[index-1][0], canvas.height);
       ctx.lineTo(groundArray[index-1][0], groundArray[index-1][1]);
       ctx.lineTo(groundArray[index][0], groundArray[index][1]);
@@ -266,12 +260,6 @@ function collisionDetection() {
       ctx.fillStyle = "#000";
       ctx.fill();
 
-      // let deltay = groundArray[index][1] - groundArray[index-1][1];
-      // let deltax = groundArray[index][0] - groundArray[index-1][0];
-      // let theta = Math.atan2(deltay, deltax)/(Math.PI/180);
-      // let distancex = (Math.sin(theta*toRadian) *20);
-      // let distance = (Math.sin(theta*toRadian) *20);
-      // crash = ctx.isPointInStroke(x,y_20);
       if (state === states[0]) {
 
         for (let index = 0; index < 21; index++) {
@@ -293,7 +281,7 @@ function collisionDetection() {
                 y = y;
                 state = states[1];
                 state = states[3];
-                alert("OUT OF FUEL, GAME OVER")
+               
               } 
               else {
                 x=x;
@@ -302,36 +290,13 @@ function collisionDetection() {
                 state = states[1];
                 fuel -= 300;
                 explode();
-                alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
+               
               }
               break;
             }
-            
-         
-         
           
           
         }
-
-        // if (ctx.isPointInStroke(x, y-distance)) {
-        //   if ( fuel <= 300 ) {
-        //     fuel = 0;
-        //     y = y;
-        //     state = states[1];
-        //     state = states[3];
-        //     alert("OUT OF FUEL, GAME OVER")
-        //   } 
-        //   else {
-        //     y = y;
-        //     ctx.clearRect(x, y, 20, 20)
-        //     state = states[1];
-        //     fuel -= 300;
-        //     explode();
-        //     alert(`CRASHED, ${Math.floor(fuel)} FUEL remaining`)
-        //   }
-        // }
-
-
 
       }
 
@@ -344,52 +309,129 @@ function collisionDetection() {
 
 }
 
-// var stars = 10;
+var stars = 20;
+var superstar = 0;
+var starArr = [];
+
+function fillStars() {
+  superstar = Math.floor((Math.random()*stars));
+  for (let index = 0; index < stars; index++) {
+    starArr.push(
+      [
+        Math.floor((Math.random()*canvas.width)),
+        Math.floor((Math.random()*canvas.height/3))
+      ]
+    )
+    
+  }
+}
+
+var starState = false;
+
+function drawStars() {
+  for (let index = 0; index < starArr.length - 5; index++) {
+    if (index === superstar) {
+      if (!starState) {
+        ctx.beginPath();
+        ctx.arc(starArr[index][0], starArr[index][1], 2, 0, Math.PI*2);
+        ctx.fillStyle = "#FFF";
+        ctx.fill();
+        ctx.closePath();
+
+        if (ctx.isPointInStroke(x, y)) {
+          starState = true;
+          fuel +=300;
+        }
+      }
 
 
-// function drawStars() {
-
-// }
+    } else {
+      ctx.beginPath();
+      ctx.arc(starArr[index][0], starArr[index][1], 2, 0, Math.PI*2);
+      ctx.fillStyle = "#FFF";
+      ctx.fill();
+      ctx.closePath();
+    }
+   }
+  
+}
 
 function drawState() {
-  ctx.font = "16px Arial";
+  ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
   ctx.fillText("State: "+state, canvas.width-200, 20)
 }
 
 function drawxspd() {
-  ctx.font = "16px Arial";
+  ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
   ctx.fillText("Xspd: "+Math.floor(xspd*10), 0, 100)
 }
 
 function drawyspd() {
-  ctx.font = "16px Arial";
+  ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
   ctx.fillText("Yspd: "+Math.floor(yspd*10), 0, 80)
 }
 
 function drawangle() {
-  ctx.font = "16px Arial";
+  ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
   ctx.fillText("Angle: "+angle, 0, 60)
 }
 
 function drawTime() {
-  ctx.font = "16px Arial";
+  ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
   ctx.fillText("Time: "+time, 0, 20)
 }
 
 function drawFuel() {
-  ctx.font = "16px Arial";
+  ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
   ctx.fillText("Fuel: "+Math.floor(fuel), 0, 40)
 }
 
 function drawDY() {
-  ctx.font = "16px Arial";
+  ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
+  ctx.fillText(`Distance to Landing Zone ${Math.floor(dy)+1} meters`, canvas.width-350, 40)
+}
+
+var crashArr = [
+  ["YOU JUST CRASHED A 100 MEGATON LAUNCHER", 475],
+  ["YOU CREATED A SPACE CRATER", 300],
+  ["CRASHED AUXILLARY TANK", 250]
+]
+
+function drawCrash() {
+  ctx.font = "40px Lucida Grande";
+  ctx.fillStyle = "#EEE";
+  index = Math.floor(Math.random()*3);
+  ctx.fillText(crashArr[index][0], canvas.width/2 -crashArr[index][1], canvas.height/4 );
+}
+
+function drawRetry() {
+  ctx.font = "20px Lucida Grande";
+  ctx.fillStyle = "#EEE";
+  ctx.fillText("Click to Retry", canvas.width/2 -50, canvas.height/4 +80 );
+}
+
+function drawGO() {
+  ctx.font = "40px Lucida Grande";
+  ctx.fillStyle = "#EEE";
+  ctx.fillText("OUT OF FUEL, GAME OVER", canvas.width/2 - 250, canvas.height/4 );
+}
+
+function drawLand() {
+  ctx.font = "40px Lucida Grande";
+  ctx.fillStyle = "#EEE";
+  ctx.fillText("NICE LANDING", canvas.width/2 - 100, canvas.height/4 );
+}
+
+function draw() {
+  ctx.font = "16px Lucida Grande";
+  ctx.fillStyle = "#EEE";
   ctx.fillText(`Altitude ${Math.floor(dy)+1} meters`, canvas.width-200, 40)
 }
 
@@ -436,12 +478,11 @@ function drawBall() {
 function draw() {
   if (state !== "MOVING") {
     endGame();
-  }  
+  } else {
   img.src;
   img.src = 'shuttle2_0.png';
  
   ctx.clearRect(0,0, canvas.width, canvas.height);
-  // drawBall();
   drawShip();
   drawTime();
   drawFuel();
@@ -451,7 +492,23 @@ function draw() {
   drawangle();
   drawDY();
   drawGround();
+  drawStars();
   collisionDetection();
+  if(state === states[1]) {
+    drawCrash();
+    drawRetry();
+  } 
+  else if (state === states[2]) {
+    drawLand();
+    drawRetry();
+  }
+  else if (state === states[3]) {
+    drawGO();
+    drawRetry();
+  }
+  
+
+  
 
   if (rightPressed && angle < 90 ) {
     angle += 1   
@@ -498,23 +555,32 @@ function draw() {
     }
   }
   
+
+  requestAnimationFrame(draw);
+  }
 }
 
 
 
 var game;
-var ticker;
+var tick ;
+function ticker() {
+  time +=1;
+}
+
 function gameStart () {
-  game = setInterval(draw,10);
+  draw();
   tick = setInterval(ticker, 1000);
   groundArray = [];
   landingArr = [];
+  starArr = [];
+  starState = false;
   fillGroundArray();
+  fillStars();
 }
 
 
 function endGame() {
-  clearInterval(game);
   clearInterval(tick);
 }
 
