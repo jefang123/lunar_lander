@@ -182,12 +182,12 @@ function collisionDetection() {
   for (let index= 1; index < groundArray.length; index++) {
     if (landingArr.includes(index)) {
       if (x >= groundArray[index-1][0] && x <= groundArray[index][0]) {
-        dy = groundArray[index][1] - (y+20);
+        dy = (groundArray[index][1] - (y+20));
       }
       ctx.beginPath();
       ctx.moveTo(groundArray[index-1][0],groundArray[index-1][1]);
       ctx.lineTo(groundArray[index][0],groundArray[index][1])
-      ctx.strokeStyle="#FF0000";
+      ctx.strokeStyle="#FFF";
       ctx.stroke();
       
       if (state === states[0]) {
@@ -253,6 +253,7 @@ function collisionDetection() {
       ctx.lineTo(groundArray[index-1][0], groundArray[index-1][1]);
       ctx.lineTo(groundArray[index][0], groundArray[index][1]);
       ctx.lineTo(groundArray[index][0], canvas.height);
+      ctx.fillStyle = "#000";
       ctx.fill();
 
       // crash = ctx.isPointInStroke(x,y_20);
@@ -278,13 +279,6 @@ function collisionDetection() {
 
     }
   }
-  // if (state != states[0]) {
-  //   dy = 0;
-  // } 
-  // else {
-  //   dy = (canvas.height -(30+20)) - y;
-  // }
-
   if (state === states[0]) {
     x += xspd;
     y += yspd;
@@ -292,45 +286,52 @@ function collisionDetection() {
 
 }
 
+// var stars = 10;
+
+
+// function drawStars() {
+
+// }
+
 function drawState() {
   ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = "#EEE"
   ctx.fillText("State: "+state, canvas.width-200, 20)
 }
 
 function drawxspd() {
   ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = "#EEE"
   ctx.fillText("Xspd: "+Math.floor(xspd*10), 0, 100)
 }
 
 function drawyspd() {
   ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = "#EEE"
   ctx.fillText("Yspd: "+Math.floor(yspd*10), 0, 80)
 }
 
 function drawangle() {
   ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = "#EEE"
   ctx.fillText("Angle: "+angle, 0, 60)
 }
 
 function drawTime() {
   ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = "#EEE"
   ctx.fillText("Time: "+time, 0, 20)
 }
 
 function drawFuel() {
   ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = "#EEE"
   ctx.fillText("Fuel: "+Math.floor(fuel), 0, 40)
 }
 
 function drawDY() {
   ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = "#EEE"
   ctx.fillText(`Altitude ${Math.floor(dy)+1} meters`, canvas.width-200, 40)
 }
 
