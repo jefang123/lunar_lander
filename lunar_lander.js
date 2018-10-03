@@ -178,6 +178,9 @@ function drawGround() {
 }
 let land;
 let crash;
+
+
+
 function collisionDetection() {
   for (let index= 1; index < groundArray.length; index++) {
     if (landingArr.includes(index)) {
@@ -189,6 +192,7 @@ function collisionDetection() {
       ctx.lineTo(groundArray[index][0],groundArray[index][1])
       ctx.strokeStyle="#FFF";
       ctx.stroke();
+      
       
       if (state === states[0]) {
         if (ctx.isPointInStroke(x, y+20)) {
@@ -367,6 +371,14 @@ function drawShip () {
   }
 }
 
+function drawBall() {
+  ctx.beginPath();
+  ctx.arc(x, y, 20, 0, Math.PI*2);
+  ctx.fillStyle = "#0095DD";
+  ctx.fill();
+  ctx.closePath();
+}
+
 function draw() {
   if (state !== "MOVING") {
     endGame();
@@ -375,7 +387,7 @@ function draw() {
   img.src = 'shuttle2_0.png';
  
   ctx.clearRect(0,0, canvas.width, canvas.height);
-
+  // drawBall();
   drawShip();
   drawTime();
   drawFuel();
@@ -448,8 +460,8 @@ function gameStart () {
 
 
 function endGame() {
-  clearInterval(game)
-  clearInterval(tick)
+  clearInterval(game);
+  clearInterval(tick);
 }
 
 gameStart();
