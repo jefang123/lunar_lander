@@ -14,8 +14,7 @@ var fuel = 1000;
 var angle = -90; 
 var gravity = .0015;
 var dy;
-
-// gravity cap = .0040
+var sound = "ON";
 
 var toDegrees = 180 / Math.PI;
 var toRadian = Math.PI / 180;
@@ -89,6 +88,14 @@ function keyDownHandler(e) {
     case 40 : 
       downPressed = true;
       break;
+    case 80 :
+      if (sound === "ON") {
+        sound = "OFF";
+      } else {
+        sound = "ON";
+      }
+      
+      break;
   }
 }
 
@@ -123,11 +130,14 @@ function tick() {
 
 var img = new Image();
 
+
 function explode() {
   var explosion = new Image();
   explosion.src = 'explosion_2.png';
   ctx.drawImage(explosion, 75, 0, 80 , 80, x, y, 20, 20);
-
+  if (sound === "ON") {
+    document.getElementById("effect").play()
+  }
 }
 
 var landingspace = 70;
@@ -199,10 +209,11 @@ function collisionDetection() {
       
       if (state === states[0]) {
         if (ctx.isPointInStroke(x, y+20)) {
-          if (angle <= -11 || angle >= 11) {
+          if (angle <= -10 || angle >= 10) {
             if ( fuel <= 300 ) {
               fuel = 0;
               y = y;
+              state = states[1];
               state = states[3];
             } else {
               y = y;
@@ -212,7 +223,7 @@ function collisionDetection() {
               explode();
             }
           }
-          if (angle > -11 && angle < 11) 
+          if (angle > -10 && angle < 10) 
           { 
             if ((yspd > -.5 && yspd < .5) &&
             (xspd > -.5 && xspd < .5)) {
@@ -228,27 +239,22 @@ function collisionDetection() {
               if (gravity < .0040) {
                 gravity += .0005
               }
-              break;
-              // alert("YOU'VE LANDED");
             } else {
               if ( fuel <= 300 ) {
                 fuel = 0;
                 y = y;
                 state = states[1];
                 state = states[3];
-             
               } else {
                 y = y;
                 ctx.clearRect(x, y, 20, 20)
                 state = states[1];
                 fuel -= 300;
                 explode();
-                
               }
             }
           }
         }
-
       }
     }
     else {
@@ -359,7 +365,7 @@ function drawStars() {
 function drawState() {
   ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
-  ctx.fillText("State: "+state, canvas.width-200, 20)
+  ctx.fillText("Sound: "+sound, canvas.width-200, 20)
 }
 
 function drawxspd() {
@@ -417,6 +423,18 @@ function drawRetry() {
   ctx.fillText("Click to Retry", canvas.width/2 -50, canvas.height/4 +80 );
 }
 
+function drawStart() {
+  ctx.font = "20px Lucida Grande";
+  ctx.fillStyle = "#EEE";
+  ctx.fillText("Click to Start", canvas.width/2 -50, canvas.height/4 +80 );
+}
+
+function drawNewGame() {
+  ctx.font = "20px Lucida Grande";
+  ctx.fillStyle = "#EEE";
+  ctx.fillText("Click to Start New Game", canvas.width/2 -100, canvas.height/4 +80 );
+}
+
 function drawGO() {
   ctx.font = "40px Lucida Grande";
   ctx.fillStyle = "#EEE";
@@ -467,14 +485,6 @@ function drawShip () {
   }
 }
 
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, 20, 0, Math.PI*2);
-  ctx.fillStyle = "#0095DD";
-  ctx.fill();
-  ctx.closePath();
-}
-
 function draw() {
   if (state !== "MOVING") {
     endGame();
@@ -504,7 +514,7 @@ function draw() {
   }
   else if (state === states[3]) {
     drawGO();
-    drawRetry();
+    drawNewGame();
   }
   
 
@@ -584,7 +594,12 @@ function endGame() {
   clearInterval(tick);
 }
 
-gameStart();
 if (state !== "MOVING" ) {
   endGame();
+}
+
+firstdraw();
+function firstdraw() {
+  state = states[3];
+  drawStart();
 }
