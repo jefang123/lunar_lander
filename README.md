@@ -1,8 +1,8 @@
-# tentative_project
+# Terra Lander
 
 ## MVP
 
-Lunar Lander is a browser game where the player tries to land a spacecraft with limited fuel and gravitational force acting against the player's ship.
+Terra Lander is a browser game where the player tries to land a spacecraft with limited fuel and gravitational force acting against the player's ship.
 
 ## Wireframe
 
