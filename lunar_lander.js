@@ -214,8 +214,8 @@ function collisionDetection() {
               fuel = 0;
               y = y;
               state = states[1];
-              state = states[3];
               explode();
+              state = states[3];
             } else {
               y = y;
               ctx.clearRect(x, y, 20, 20)
@@ -245,8 +245,8 @@ function collisionDetection() {
                 fuel = 0;
                 y = y;
                 state = states[1];
-                state = states[3];
                 explode();
+                state = states[3];
               } else {
                 y = y;
                 ctx.clearRect(x, y, 20, 20)
@@ -288,8 +288,8 @@ function collisionDetection() {
                 x = x
                 y = y;
                 state = states[1];
-                state = states[3];
                 explode();
+                state = states[3];
               } 
               else {
                 x=x;
@@ -300,7 +300,7 @@ function collisionDetection() {
                 explode();
                
               }
-              break;
+              // break;
             }
           
           
@@ -373,13 +373,15 @@ function drawState() {
 function drawxspd() {
   ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
-  ctx.fillText("Xspd: "+Math.floor(xspd*10), 0, 100)
+  ctx.fillText("Xspd: "+Math.floor(x), 0, 100)
+  // ctx.fillText("Xspd: "+Math.floor(xspd*10), 0, 100)
 }
 
 function drawyspd() {
   ctx.font = "16px Lucida Grande";
   ctx.fillStyle = "#EEE"
-  ctx.fillText("Yspd: "+Math.floor(yspd*10), 0, 80)
+  // ctx.fillText("Yspd: "+Math.floor(yspd*10), 0, 80)
+  ctx.fillText("Yspd: "+Math.floor(y), 0, 80)
 }
 
 function drawangle() {
@@ -489,7 +491,9 @@ function draw() {
   img.src = 'shuttle2_0.png';
  
   ctx.clearRect(0,0, canvas.width, canvas.height);
-  drawShip();
+  if (state == states[0]) {
+    drawShip();
+  }
   drawTime();
   drawFuel();
   drawxspd();
