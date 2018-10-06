@@ -215,6 +215,7 @@ function collisionDetection() {
               y = y;
               state = states[1];
               state = states[3];
+              explode();
             } else {
               y = y;
               ctx.clearRect(x, y, 20, 20)
@@ -225,8 +226,8 @@ function collisionDetection() {
           }
           if (angle > -10 && angle < 10) 
           { 
-            if ((yspd > -.5 && yspd < .5) &&
-            (xspd > -.5 && xspd < .5)) {
+            if ((yspd >= -.5 && yspd <= .5) &&
+            (xspd >= -.5 && xspd <= .5)) {
               state = states[2];
               y = y;
               if (landingspace > 30) {
@@ -245,6 +246,7 @@ function collisionDetection() {
                 y = y;
                 state = states[1];
                 state = states[3];
+                explode();
               } else {
                 y = y;
                 ctx.clearRect(x, y, 20, 20)
@@ -287,7 +289,7 @@ function collisionDetection() {
                 y = y;
                 state = states[1];
                 state = states[3];
-               
+                explode();
               } 
               else {
                 x=x;
@@ -421,12 +423,6 @@ function drawRetry() {
   ctx.font = "20px Lucida Grande";
   ctx.fillStyle = "#EEE";
   ctx.fillText("Click to Retry", canvas.width/2 -50, canvas.height/4 +80 );
-}
-
-function drawStart() {
-  ctx.font = "20px Lucida Grande";
-  ctx.fillStyle = "#EEE";
-  ctx.fillText("Click to Start", canvas.width/2 -50, canvas.height/4 +80 );
 }
 
 function drawNewGame() {
@@ -603,3 +599,18 @@ function firstdraw() {
   state = states[3];
   drawStart();
 }
+
+function drawStart() {
+  ctx.font = "20px Lucida Grande";
+  ctx.fillStyle = "#EEE";
+  ctx.fillText("Your team of astronauts have finally found a potentially inhabitable planet,", 250, canvas.height/4 +30);
+  ctx.fillText("but now you are tasked with landing the multi-billion dollar ship", 250, canvas.height/4 +50);
+  ctx.fillText("Change Angle with Left and Right Arrow Keys", 100, canvas.height/4 +110);
+  ctx.fillText("Accelerate with Up Arrow Key", 100, canvas.height/4 +130);
+  ctx.fillText("P to toggle Sound", 100, canvas.height/4 + 150);
+  ctx.fillText("TO LAND", 100, canvas.height/4 +190 );
+  ctx.fillText("Horizontal/Vertical Speed between -5 and 5", 100, canvas.height/4 +210);
+  ctx.fillText("Angle between -10 and 10", 100, canvas.height/4 +230);
+  ctx.fillText("Click to Start", canvas.width/2 - 50, canvas.height/4 +280);
+}
+
