@@ -12,7 +12,8 @@ Navigation and volume control will be under canvas.
 ## Technologies 
 Canvas
 HTML
-Backend for highscore?
+
+TODO: Backend for highscore?
 
 ## Timeline
 

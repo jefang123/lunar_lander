@@ -2,6 +2,10 @@
   padding: 0; margin: 0; 
 }
 
+body {
+  background-image: url("planet.jpg");
+}
+
 .header-links {
   background-color: #aceace;
   display: flex;
@@ -17,7 +21,7 @@
 i {
   font-size: 5rem;
   text-decoration: none;
-  color: blue;
+  color: #eee;
 }
 
 /* .canvas-wrapper > nav > p {
@@ -45,4 +49,8 @@ i {
 
 audio {
   display: none;
+}
+
+#myCanvas:focus{
+  outline: none;
 }
