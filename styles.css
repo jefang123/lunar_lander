@@ -2,9 +2,9 @@
   padding: 0; margin: 0; 
 }
 
-body {
+/* body {
   background-image: url("planet.jpg");
-}
+} */
 
 .header-links {
   background-color: #aceace;
@@ -51,6 +51,6 @@ audio {
   display: none;
 }
 
-#myCanvas:focus{
+/* #myCanvas:focus{
   outline: none;
-}
+} */
