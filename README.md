@@ -6,20 +6,14 @@ Terra Lander is a browser game where the player tries to land a spacecraft with 
 
 ## Wireframe
 
-Centered Canvas with portfolio, github and linkedIn links to the right. 
-Navigation and volume control in canvas instruction screen.
+* Centered Canvas with portfolio, github and linkedIn links to the right. 
+* Navigation, Volume Control in Canvas instruction screen.
 
 ## Technologies 
 Canvas
 HTML
-TODO: Backend for highscore
 
-## Timeline
+## Future Ideas
 
-Day 1: Setup, basic outline, basic controls, volume and music 
-
-Day 2: Canvas
-
-Day 3: Canvas, CSS, sprites and images
-
-+ : Canvas, polishing, backend implementation
+Backend implementation for high scores
+Optimization of collision detection (SAT collision)
