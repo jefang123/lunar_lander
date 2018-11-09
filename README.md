@@ -12,3 +12,11 @@ HTML
 
 Backend implementation for high scores
 Optimization of collision detection (SAT collision)
+
+# Instructions 
+
+Press Left and Right Arrows to change Angle of descent 
+Press Up Arrow Key to accelerate the ship 
+
+The stats on the left will turn GREEN for a safe landing
+Landing with RED stats will result in a crash 
