@@ -56,3 +56,7 @@ audio {
 #myCanvas:focus{
   outline: none;
 }
+
+@keyframes blink {
+  to {visibility: hidden;}
+}
