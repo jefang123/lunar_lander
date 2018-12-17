@@ -2,7 +2,7 @@
 
 <!-- ![alt text](https://github.com/jefang123/terra_lander/tree/master/media/Terra_Lander.png) -->
 
-[[https://github.com/jefang123/terra_lander/tree/master/media/Terra_Lander.png]]
+![ScreenShot](https://github.com/jefang123/terra_lander/tree/master/media/Terra_Lander.png)
 <!-- ![My image](jefang123.github.com/terra_lander/media/Terra_Lander.png) -->
 
 Terra Lander is a 1980s inspired browser game where the player tries to land a spacecraft with limited fuel and gravitational force acting against the player's ship.
