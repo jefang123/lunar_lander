@@ -23,5 +23,5 @@ HTML/CSS
 
 ## Future Ideas
 
-Backend implementation for high scores
+Backend implementation for high scores <br/>
 Optimization of collision detection (SAT collision)
