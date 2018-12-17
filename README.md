@@ -17,8 +17,9 @@ Landing with RED stats will result in a crash
 
 # Technologies
 
-Javascript
-Canvas
+Javascript<br/>
+Canvas<br/>
+HTML/CSS
 
 ## Future Ideas
 
