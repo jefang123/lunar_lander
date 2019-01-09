@@ -29,10 +29,6 @@ i {
   color: #eee;
 }
 
-/* .canvas-wrapper > nav > p {
-  margin-right: 20px;
-} */
-
 .canvas-wrapper {
   position: relative;
   display: flex;
@@ -53,9 +49,6 @@ i {
   padding: 10px;
 }
 
-/* document.getElementById('score-form') */
-/* score.className = "hidden2" */
-/* score.className = 'hidden' */
 .hidden {
   display: none;
 }
@@ -78,8 +71,6 @@ i {
   margin-left: 20px;
 }
 
-/* document.getElementById('high-scores') */
-/* score.className = "scoreboard" */
 .scoreboard {
   display: block;
   text-align: center;

@@ -48,19 +48,17 @@
        
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-database.js"></script>
+
   <script>
     // Initialize Firebase
     var config = {
-      apiKey: "AIzaSyDFAxfWb0gI8hXFnlaEXCCbLGuAbephe44",
-      authDomain: "terra-lander.firebaseapp.com",
       databaseURL: "https://terra-lander.firebaseio.com",
-      projectId: "terra-lander",
-      storageBucket: "terra-lander.appspot.com",
-      messagingSenderId: "376743324126"
     };
     firebase.initializeApp(config);
   </script>
+  
   <script src="./lib/util.js"></script>
   <script src="./lib/draw_text.js"></script>
   <script src="./lib/draw_stars.js"></script>
