@@ -19,9 +19,9 @@ Landing with RED stats will result in a crash
 
 Javascript<br/>
 Canvas<br/>
-HTML/CSS
+HTML/CSS<br />
+Firebase
 
 ## Future Ideas
 
-Backend implementation for high scores <br/>
 Optimization of collision detection (SAT collision)
