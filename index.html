@@ -11,9 +11,31 @@
   <title>TERRA LANDER</title>
 </head>
 <body>
-   
   <div class="canvas-wrapper">
       <canvas tabindex="1" id="myCanvas" width="1200" height="700"></canvas>
+
+      <form id="score-form" class="hidden">
+        <label>
+          NAME:
+          <input id="user" type="text" value="AAAAAA" maxlength=6 > 
+        </label>
+        <p id="score"></p>
+      </form>
+
+      <button id='high-scores-button' class="hidden" > HIGH SCORES </button>
+
+      <table id="high-scores" class="hidden">
+        <tbody id="score-body">
+
+          <tr>
+            <th>RANK</th>
+            <th>NAME</th>
+            <th>SCORE</th>
+          </tr>
+          
+        </tbody>
+      </table>
+
        <div>
          <div>
          
@@ -25,6 +47,20 @@
        </div>
        
   </div>
+
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDFAxfWb0gI8hXFnlaEXCCbLGuAbephe44",
+      authDomain: "terra-lander.firebaseapp.com",
+      databaseURL: "https://terra-lander.firebaseio.com",
+      projectId: "terra-lander",
+      storageBucket: "terra-lander.appspot.com",
+      messagingSenderId: "376743324126"
+    };
+    firebase.initializeApp(config);
+  </script>
   <script src="./lib/util.js"></script>
   <script src="./lib/draw_text.js"></script>
   <script src="./lib/draw_stars.js"></script>
@@ -36,4 +72,5 @@
   
   <audio src="./media/explosion.mp3" preload="auto" controls="none" id="effect"></audio>
 </body>
+
 </html>
