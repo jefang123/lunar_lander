@@ -1,10 +1,15 @@
 * { 
   padding: 0; margin: 0; 
   font-family: 'Press Start 2P';
+  text-transform: uppercase;
 }
 
 input:focus, button:focus {
   outline: none;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 body {
