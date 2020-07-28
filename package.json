@@ -1,0 +1,31 @@
+{
+  "name": "terra_lander",
+  "version": "1.0.0",
+  "description": "<img src=\"/media/Terra_Lander.png\" alt=\"Terra Lander\"/>",
+  "main": "index.html",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jefang123/terra_lander.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jefang123/terra_lander/issues"
+  },
+  "homepage": "https://github.com/jefang123/terra_lander#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.44.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "firebase": "^5.7.2"
+  }
+}

@@ -7,7 +7,7 @@
   crossorigin="anonymous">
   <link rel="stylesheet" href="./css/styles.css">
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" type='text/css'>
-  <link rel="shortcut icon" type="image/png" href="shuttle2_0.png" >
+  <link rel="shortcut icon" type="image/png" href="media/shuttle2_0.png" >
   <title>TERRA LANDER</title>
 </head>
 <body>
@@ -47,25 +47,7 @@
        
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-database.js"></script>
-
-  <script>
-    // Initialize Firebase
-    var config = {
-      databaseURL: "https://terra-lander.firebaseio.com",
-    };
-    firebase.initializeApp(config);
-  </script>
-
-  <script src="./lib/util.js"></script>
-  <script src="./lib/draw_text.js"></script>
-  <script src="./lib/draw_stars.js"></script>
-  <script src="./lib/ship.js"></script>
-  <script src="./lib/ground.js"></script>
-  <script src="./lib/collision_detection.js"></script>
-  <script src="./lib/game.js"></script>
-  <script src="./lib/lunar_lander.js"></script>
+  <script src="./public/bundle.js"></script>
   
   <audio src="./media/explosion.mp3" preload="auto" controls="none" id="effect"></audio>
 </body>
